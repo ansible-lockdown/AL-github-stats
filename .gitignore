@@ -2,9 +2,6 @@
 .claude/
 AGENT.md
 
-# Generated reports
-summary_report.html
-
 # Python
 __pycache__/
 *.py[cod]

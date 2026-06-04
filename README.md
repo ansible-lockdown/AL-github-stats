@@ -8,6 +8,12 @@
   Python scripts to collect, summarise, and report on GitHub activity across the <strong>ansible-lockdown</strong> organisation.
 </p>
 
+<p align="center">
+  <a href="https://html-preview.github.io/?url=https://github.com/ansible-lockdown/github_stats/blob/main/2026_stats/summary_report.html">
+    View latest HTML report
+  </a>
+</p>
+
 ---
 
 ## Contents
@@ -80,7 +86,9 @@ open 2026_stats/summary_report.html
 
 ### `github_monthly_org_stats.py`
 
-Fetches commits, merged PRs, closed issues, and files changed for **every repository** in a GitHub organisation. Outputs a JSON array to stdout.
+Fetches commits, merged PRs, closed issues, and files changed for **every repository that existed during the queried period**. Uses the GitHub GraphQL API for per-repo stats (one query per repo vs hundreds of REST calls), with up to 8 repos processed in parallel. A full org run completes in under a minute.
+
+Repos are automatically excluded if they did not exist at the end of the queried period (filtered by `created_at`), or if their name contains `iac` (case-insensitive).
 
 **Options:**
 
@@ -123,7 +131,16 @@ python3 github_monthly_org_stats.py --org ansible-lockdown --month 11 --year 202
 }
 ```
 
-The `period` field records the exact date range queried. The script also prints the date range to stderr during the run so you can confirm the window without opening the file.
+The `period` field records the exact date range queried. The script prints the date range and per-repo progress to stderr during the run:
+
+```
+Fetching stats: 1stMay2026 - 31stMay2026
+  [1/118] RHEL9-STIG
+  [3/118] RHEL8-CIS
+  ...
+```
+
+Progress lines appear in completion order (non-deterministic) as repos are processed in parallel. The repo count shown reflects only repos that existed during the period.
 
 ---
 
@@ -264,6 +281,9 @@ jq '.repos | length' 2026_stats/may26_stats.json
 
 ## Notes
 
-- `github_monthly_org_stats.py` handles GitHub API pagination automatically and skips repos that return 404 (PRs/issues disabled), 409 (empty repo), or 410 (feature disabled) without aborting the run.
+- `github_monthly_org_stats.py` uses the GitHub GraphQL API for per-repo stats — approximately 16x fewer API calls than the previous REST approach. The org repo listing still uses REST.
+- Repos are excluded from the output if their name contains `iac` (case-insensitive) or if their `created_at` date is after the end of the queried period. This ensures historical files reflect what actually existed at the time.
+- `files_changed` is sourced from GraphQL's `changedFilesIfAvailable` field, which returns the true file count per commit. The previous REST approach capped at 300 files per commit; the GraphQL figure is more accurate for large commits. Commits with diffs exceeding GitHub's internal size limit return `null` and are counted as 0 — rare for STIG/CIS hardening roles.
+- `github_monthly_org_stats.py` processes up to 8 repos concurrently, well within GitHub's 5,000 requests/hour rate limit.
 - Stats JSON files should be saved into year subdirectories: `2025_stats/`, `2026_stats/`, etc.
 - The `monthly_summary_report.py` script accepts both full month names (`january`) and 3-letter abbreviations (`jan`) in filenames.

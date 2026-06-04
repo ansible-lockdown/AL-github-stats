@@ -2,50 +2,46 @@
 """
 github_org_monthly_stats.py
 
-Print the number of commits, merged PRs, and closed issues in the last month
+Print the number of commits, merged PRs, closed issues and files changed
 for **every** repository in a GitHub organization.
+
+Uses the GitHub GraphQL API for per-repo stats (one query per repo, ~16x
+fewer API calls than the REST approach) and the REST API only for the
+initial org repo listing.
 
 Usage
 -----
-    python3 github_org_monthly_stats.py --org myorg [--token <PAT>] > monthly_stats
+    python3 github_org_monthly_stats.py --org <org> [--token <PAT>] > monthly_stats.json
 
 The PAT can also be supplied via the environment variable GITHUB_TOKEN.
 
-
 Output
 ------
-A JSON array – one element per repository – is printed to stdout.
+A JSON object with keys "period" (the date range queried) and "repos"
+(an array of per-repo stats) is printed to stdout:
 
-Example:
+{
+  "period": "1st May 2026 - 31st May 2026",
+  "repos": [
+    {
+      "name":          "repo-name",
+      "full_name":     "org/repo-name",
+      "commits":       23,
+      "prs_merged":    4,
+      "issues_closed": 12,
+      "files_changed": 156
+    },
+    ...
+  ]
+}
 
-[
-  {
-    "name":          "repo‑name",
-    "full_name":     "myorg/repo‑name",
-    "commits":       23,
-    "prs_merged":    4,
-    "issues_closed": 12,
-    "files_changed": 156
-  },
-  …
-]
-
-The output can be queries with
-e.g. Output filename november_org.json
-
-count number of issues
-jq '[.[] | .issues_closed] | add' november_org.json
-30
-count number of prs merged
-jq '[.[] | .prs_merged] | add' november_org.json
-78
-count number of commits
-jq '[.[] | .commits] | add' november_org.json
-1515
-count number of files changed
-jq '[.[] | .files_changed] | add' november_org.json
-number of repos
-grep -c \"name\": november_org.json
+Query with jq:
+    jq '.period'                                  # date range
+    jq '[.repos[] | .issues_closed] | add'        # total issues
+    jq '[.repos[] | .prs_merged]    | add'        # total PRs
+    jq '[.repos[] | .commits]       | add'        # total commits
+    jq '[.repos[] | .files_changed] | add'        # total files changed
+    jq '.repos | length'                          # number of repos
 """
 
 from __future__ import annotations
@@ -55,33 +51,27 @@ import datetime
 import json
 import os
 import sys
+import threading
+from concurrent.futures import ThreadPoolExecutor
 from typing import Dict, List
 
-import requests  # pip‑install requests if you don’t have it
+import requests
 
 
-# ----------------------------------------------------#
-# 1. Generic helpers – pagination, rate‑limit safety, #
-# ----------------------------------------------------#
+# -------------------------------------------------------- #
+# 1. REST helper — used only for org repo listing          #
+# -------------------------------------------------------- #
 
 def _get_paginated_json(
     url: str,
     headers: Dict[str, str],
     params: Dict[str, str] | None = None,
 ) -> List[Dict]:
-    """
-    Return *all* pages from a GitHub API endpoint that returns a list of
-    JSON objects.  Handles the `Link` header automatically.
-
-    The first request gets the `params` you pass; all subsequent paginated
-    requests get *no* extra params – the pagination URL already contains
-    everything that was needed.
-    """
+    """Return all pages from a GitHub REST endpoint that returns a JSON list."""
     results: List[Dict] = []
     session = requests.Session()
     session.headers.update(headers)
 
-    # 404 = repo/feature not found, 409 = empty repo, 410 = feature disabled
     _EMPTY = {404, 409, 410}
 
     first_call = True
@@ -98,126 +88,214 @@ def _get_paginated_json(
 
         results.extend(page)
 
-        # Pagination – look for the "next" rel
         link_header = resp.headers.get("Link", "")
         next_url = None
         if link_header:
-            parts = link_header.split(",")
-            for part in parts:
+            for part in link_header.split(","):
                 if 'rel="next"' in part:
-                    next_url = part[part.find("<") + 1 : part.find(">")]
+                    next_url = part[part.find("<") + 1: part.find(">")]
                     break
         url = next_url
-        first_call = False  # we’re past the first request now
+        first_call = False
 
     return results
 
 
-# ---------------------------------------------#
-# 2. Statistics helpers (commits, PRs, issues) #
-# ---------------------------------------------#
+# -------------------------------------------------------- #
+# 2. GraphQL helpers — per-repo stat collection            #
+# -------------------------------------------------------- #
 
-def _collect_commit_stats(
-    owner: str, repo: str, since: datetime.datetime, token: str,
-    until: datetime.datetime | None = None,
-) -> tuple[int, int]:
-    """Return (commit_count, files_changed) in one pass — fetches the commit list once."""
-    url = f"https://api.github.com/repos/{owner}/{repo}/commits"
-    headers = {"Authorization": f"token {token}"}
-    params: Dict[str, str] = {"since": since.isoformat(), "per_page": "100"}
-    if until:
-        params["until"] = until.isoformat()
-    commits = _get_paginated_json(url, headers, params)
+_GQL_URL = "https://api.github.com/graphql"
 
-    total_files = 0
-    session = requests.Session()
-    session.headers.update(headers)
-    for c in commits:
-        sha = c.get("sha")
-        if not sha:
-            continue
-        resp = session.get(f"https://api.github.com/repos/{owner}/{repo}/commits/{sha}")
-        if resp.status_code != 200:
-            continue
-        total_files += len(resp.json().get("files") or [])
-
-    return len(commits), total_files
-
-
-def _count_merged_prs(
-    owner: str, repo: str, since: datetime.datetime, token: str,
-    until: datetime.datetime | None = None,
-) -> int:
-    """Count PRs merged between `since` and `until`.
-
-    Sorts by updated descending and stops paginating once updated_at drops
-    below `since` — safe because merged_at <= updated_at always holds.
-    """
-    url = f"https://api.github.com/repos/{owner}/{repo}/pulls"
-    headers = {"Authorization": f"token {token}"}
-    session = requests.Session()
-    session.headers.update(headers)
-    params: Dict[str, str] = {
-        "state": "closed", "per_page": "100",
-        "sort": "updated", "direction": "desc",
+# Initial combined query — fetches commits, PRs, and issues in one round-trip.
+# changedFilesIfAvailable returns null for oversized diffs (>3000 files);
+# these are treated as 0, which is acceptable for STIG/CIS repos.
+_Q_INITIAL = """
+query($owner: String!, $repo: String!, $since: GitTimestamp!, $until: GitTimestamp!, $sinceDate: DateTime!) {
+  repository(owner: $owner, name: $repo) {
+    defaultBranchRef {
+      target {
+        ... on Commit {
+          history(since: $since, until: $until, first: 100) {
+            totalCount
+            nodes { changedFilesIfAvailable }
+            pageInfo { hasNextPage endCursor }
+          }
+        }
+      }
     }
+    pullRequests(states: MERGED, first: 100,
+                 orderBy: {field: UPDATED_AT, direction: DESC}) {
+      nodes { mergedAt updatedAt }
+      pageInfo { hasNextPage endCursor }
+    }
+    issues(states: CLOSED, first: 100, filterBy: {since: $sinceDate}) {
+      nodes { closedAt }
+      pageInfo { hasNextPage endCursor }
+    }
+  }
+}"""
 
-    count = 0
-    first_call = True
-    while url:
-        resp = session.get(url, params=params if first_call else None)
-        if resp.status_code in {404, 409, 410}:
-            return 0
-        if resp.status_code != 200:
-            sys.exit(f"GitHub API error {resp.status_code} – {resp.text}")
-        page = resp.json()
-        first_call = False
-        stop = False
-        for p in page:
-            updated_at = p.get("updated_at", "")
+# Focused pagination queries — only called when a collection exceeds 100 items.
+_Q_COMMITS = """
+query($owner: String!, $repo: String!, $since: GitTimestamp!, $until: GitTimestamp!, $cursor: String!) {
+  repository(owner: $owner, name: $repo) {
+    defaultBranchRef {
+      target {
+        ... on Commit {
+          history(since: $since, until: $until, first: 100, after: $cursor) {
+            nodes { changedFilesIfAvailable }
+            pageInfo { hasNextPage endCursor }
+          }
+        }
+      }
+    }
+  }
+}"""
+
+_Q_PRS = """
+query($owner: String!, $repo: String!, $cursor: String!) {
+  repository(owner: $owner, name: $repo) {
+    pullRequests(states: MERGED, first: 100, after: $cursor,
+                 orderBy: {field: UPDATED_AT, direction: DESC}) {
+      nodes { mergedAt updatedAt }
+      pageInfo { hasNextPage endCursor }
+    }
+  }
+}"""
+
+_Q_ISSUES = """
+query($owner: String!, $repo: String!, $sinceDate: DateTime!, $cursor: String!) {
+  repository(owner: $owner, name: $repo) {
+    issues(states: CLOSED, first: 100, after: $cursor, filterBy: {since: $sinceDate}) {
+      nodes { closedAt }
+      pageInfo { hasNextPage endCursor }
+    }
+  }
+}"""
+
+
+def _graphql_post(query: str, variables: dict, token: str) -> dict:
+    resp = requests.post(
+        _GQL_URL,
+        headers={"Authorization": f"bearer {token}"},
+        json={"query": query, "variables": variables},
+        timeout=30,
+    )
+    if resp.status_code != 200:
+        sys.exit(f"GraphQL HTTP error {resp.status_code}: {resp.text}")
+    return resp.json()
+
+
+def _graphql_repo_stats(
+    owner: str, repo: str,
+    since: datetime.datetime, until: datetime.datetime,
+    token: str,
+) -> tuple[int, int, int, int]:
+    """Return (commits, files_changed, prs_merged, issues_closed) via GraphQL."""
+    since_ts = since.isoformat()
+    until_ts = until.isoformat()
+
+    raw = _graphql_post(_Q_INITIAL, {
+        "owner": owner, "repo": repo,
+        "since": since_ts, "until": until_ts,
+        "sinceDate": since_ts,
+    }, token)
+
+    if "errors" in raw and not raw.get("data"):
+        msgs = [e.get("message", "") for e in raw["errors"]]
+        print(f"  GraphQL error for {repo}: {msgs}", file=sys.stderr)
+        return 0, 0, 0, 0
+    if not raw.get("data"):
+        return 0, 0, 0, 0
+
+    repo_data = raw["data"].get("repository") or {}
+
+    # ---- Commits + files changed ----
+    default_ref = repo_data.get("defaultBranchRef") or {}
+    history = (default_ref.get("target") or {}).get("history") or {}
+    commit_count = history.get("totalCount", 0)
+    files_changed = sum(
+        (n.get("changedFilesIfAvailable") or 0) for n in history.get("nodes", [])
+    )
+    pi = history.get("pageInfo", {})
+    cursor = pi.get("endCursor") if pi.get("hasNextPage") else None
+    while cursor:
+        raw2 = _graphql_post(_Q_COMMITS, {
+            "owner": owner, "repo": repo,
+            "since": since_ts, "until": until_ts, "cursor": cursor,
+        }, token)
+        h2 = (((raw2.get("data") or {}).get("repository") or {})
+              .get("defaultBranchRef") or {})
+        h2 = (h2.get("target") or {}).get("history") or {}
+        files_changed += sum(
+            (n.get("changedFilesIfAvailable") or 0) for n in h2.get("nodes", [])
+        )
+        pi = h2.get("pageInfo", {})
+        cursor = pi.get("endCursor") if pi.get("hasNextPage") else None
+
+    # ---- Merged PRs ----
+    def _tally_prs(nodes: list) -> tuple[int, bool]:
+        count, stop = 0, False
+        for node in nodes:
+            updated_at = node.get("updatedAt", "")
             if updated_at and datetime.datetime.fromisoformat(updated_at.replace("Z", "+00:00")) < since:
                 stop = True
                 break
-            merged_at = p.get("merged_at")
+            merged_at = node.get("mergedAt")
             if not merged_at:
                 continue
-            merged_dt = datetime.datetime.fromisoformat(merged_at.replace("Z", "+00:00"))
-            if merged_dt > since and (until is None or merged_dt <= until):
+            dt = datetime.datetime.fromisoformat(merged_at.replace("Z", "+00:00"))
+            if since < dt <= until:
                 count += 1
-        if stop:
-            break
-        link = resp.headers.get("Link", "")
-        url = next(
-            (part[part.find("<") + 1: part.find(">")] for part in link.split(",") if 'rel="next"' in part),
-            None,
-        )
-    return count
+        return count, stop
+
+    pr_data = repo_data.get("pullRequests") or {}
+    prs_merged, stop = _tally_prs(pr_data.get("nodes", []))
+    pi = pr_data.get("pageInfo", {})
+    cursor = pi.get("endCursor") if (not stop and pi.get("hasNextPage")) else None
+    while cursor:
+        raw2 = _graphql_post(_Q_PRS, {
+            "owner": owner, "repo": repo, "cursor": cursor,
+        }, token)
+        pd2 = ((raw2.get("data") or {}).get("repository") or {}).get("pullRequests") or {}
+        n, stop = _tally_prs(pd2.get("nodes", []))
+        prs_merged += n
+        pi = pd2.get("pageInfo", {})
+        cursor = pi.get("endCursor") if (not stop and pi.get("hasNextPage")) else None
+
+    # ---- Closed issues ----
+    def _tally_issues(nodes: list) -> int:
+        count = 0
+        for node in nodes:
+            closed_at = node.get("closedAt")
+            if not closed_at:
+                continue
+            dt = datetime.datetime.fromisoformat(closed_at.replace("Z", "+00:00"))
+            if since < dt <= until:
+                count += 1
+        return count
+
+    issue_data = repo_data.get("issues") or {}
+    issues_closed = _tally_issues(issue_data.get("nodes", []))
+    pi = issue_data.get("pageInfo", {})
+    cursor = pi.get("endCursor") if pi.get("hasNextPage") else None
+    while cursor:
+        raw2 = _graphql_post(_Q_ISSUES, {
+            "owner": owner, "repo": repo,
+            "sinceDate": since_ts, "cursor": cursor,
+        }, token)
+        id2 = ((raw2.get("data") or {}).get("repository") or {}).get("issues") or {}
+        issues_closed += _tally_issues(id2.get("nodes", []))
+        pi = id2.get("pageInfo", {})
+        cursor = pi.get("endCursor") if pi.get("hasNextPage") else None
+
+    return commit_count, files_changed, prs_merged, issues_closed
 
 
-def _count_closed_issues(
-    owner: str, repo: str, since: datetime.datetime, token: str,
-    until: datetime.datetime | None = None,
-) -> int:
-    """Count issues (excluding PRs) closed between `since` and `until`."""
-    url = f"https://api.github.com/repos/{owner}/{repo}/issues"
-    headers = {"Authorization": f"token {token}"}
-    # `since` filters by updated_at >= since; closed_at <= updated_at, so this
-    # safely excludes issues untouched before our window without missing any.
-    params = {"state": "closed", "per_page": "100", "since": since.isoformat()}
-    issues = _get_paginated_json(url, headers, params)
-
-    closed_recent = 0
-    for issue in issues:
-        if "pull_request" in issue:
-            continue
-        closed_at = issue.get("closed_at")
-        if not closed_at:
-            continue
-        closed_dt = datetime.datetime.fromisoformat(closed_at.replace("Z", "+00:00"))
-        if closed_dt > since and (until is None or closed_dt <= until):
-            closed_recent += 1
-    return closed_recent
-
+# -------------------------------------------------------- #
+# 3. Month window helper                                   #
+# -------------------------------------------------------- #
 
 def _month_window(month: str, year: int) -> tuple[datetime.datetime, datetime.datetime]:
     """Return (since, until) covering the full calendar month."""
@@ -249,7 +327,7 @@ def _month_window(month: str, year: int) -> tuple[datetime.datetime, datetime.da
 
 
 # ----------------------- #
-# 3. CLI argument parsing #
+# 4. CLI argument parsing #
 # ----------------------- #
 
 def parse_args() -> argparse.Namespace:
@@ -264,9 +342,9 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-# --------------#
-# 4. Main logic #
-# --------------#
+# -------------- #
+# 5. Main logic  #
+# -------------- #
 
 def main() -> None:
     args = parse_args()
@@ -276,12 +354,12 @@ def main() -> None:
 
     org = args.org
 
-    # 4a. Pull all repos in the org (public & private – token required)
+    # 5a. Pull all repos in the org via REST
     base_org_url = f"https://api.github.com/orgs/{org}/repos"
     headers = {"Authorization": f"token {token}"}
-    repos: List[Dict] = _get_paginated_json(base_org_url, headers, {"per_page": "100", "type": "all"})
+    all_repos: List[Dict] = _get_paginated_json(base_org_url, headers, {"per_page": "100", "type": "all"})
 
-    # 4b. Work out the time window
+    # 5b. Work out the time window
     now = datetime.datetime.now(datetime.timezone.utc)
     if args.month:
         year = args.year or now.year
@@ -299,30 +377,52 @@ def main() -> None:
         return f"{_ordinal(dt.day)}{dt.strftime('%b%Y')}"
 
     until_display = until if until else now
+
+    def _repo_existed(repo: Dict) -> bool:
+        created_at = repo.get("created_at") or ""
+        if not created_at:
+            return True
+        try:
+            created_dt = datetime.datetime.fromisoformat(created_at.replace("Z", "+00:00"))
+            return created_dt <= until_display
+        except ValueError:
+            return True
+
+    repos: List[Dict] = [
+        r for r in all_repos
+        if "iac" not in r["name"].lower() and _repo_existed(r)
+    ]
+
     print(f"Fetching stats: {_fmt(since)} - {_fmt(until_display)}", file=sys.stderr)
 
-    # 4c. Iterate over every repo, collect stats, and build the output
-    results = []
-    for repo in repos:
-        name = repo["name"]
+    # 5c. Collect stats for every repo via GraphQL, in parallel
+    total_repos = len(repos)
+    done_count = 0
+    lock = threading.Lock()
+
+    def _process_repo(repo: Dict) -> Dict:
+        nonlocal done_count
+        name  = repo["name"]
         owner = repo["owner"]["login"]
-
-        commits, files_changed = _collect_commit_stats(owner, name, since, token, until)
-        prs_merged = _count_merged_prs(owner, name, since, token, until)
-        issues_closed = _count_closed_issues(owner, name, since, token, until)
-
-        results.append(
-            {
-                "name": name,
-                "full_name": f"{owner}/{name}",
-                "commits": commits,
-                "prs_merged": prs_merged,
-                "issues_closed": issues_closed,
-                "files_changed": files_changed,
-            }
+        commits, files_changed, prs_merged, issues_closed = _graphql_repo_stats(
+            owner, name, since, until_display, token
         )
+        with lock:
+            done_count += 1
+            print(f"  [{done_count}/{total_repos}] {name}", file=sys.stderr)
+        return {
+            "name": name,
+            "full_name": f"{owner}/{name}",
+            "commits": commits,
+            "prs_merged": prs_merged,
+            "issues_closed": issues_closed,
+            "files_changed": files_changed,
+        }
 
-    # 4d. Pretty-print wrapped output
+    with ThreadPoolExecutor(max_workers=8) as ex:
+        results = list(ex.map(_process_repo, repos))
+
+    # 5d. Print wrapped JSON output
     output = {
         "period": f"{_fmt(since)} - {_fmt(until_display)}",
         "repos": results,

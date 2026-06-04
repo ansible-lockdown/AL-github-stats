@@ -14,7 +14,7 @@
 - Target org is `ansible-lockdown`.
 - Always exclude repos with "iac" in the name (case-insensitive) from any stats counts or reports.
 - Stats JSON files belong in year-named subdirectories: `2025_stats/`, `2026_stats/`, etc. Not in the project root.
-- `summary_report.html` is a generated file — never commit it.
+- `summary_report.html` is a generated file — it is tracked in git and should be committed when regenerated.
 - Classification logic (Linux OS / Windows / Other) lives in `summarize_org_stats.py`. Import from there; do not duplicate.
 - The HTML report (`monthly_summary_report.py`) uses `images/ansible-lockdown.png` as the header logo.
 - Stats JSON output format is `{"period": "<display range>", "repos": [...]}`. Consumer scripts must handle both this format and the legacy bare array (for existing files). Never add plain-text lines to stdout when the output is JSON — embed metadata inside the JSON structure instead.

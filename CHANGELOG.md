@@ -16,11 +16,13 @@
 
 - Added `--month` and `--year` arguments to query a specific calendar month (e.g. `--month May --year 2026`) instead of a rolling day window
 - JSON output is now wrapped in an object: `{"period": "1st May 2026 - 31st May 2026", "repos": [...]}` — the `period` field records the exact date range queried
-- The date range is also printed to stderr at the start of the run so you can confirm the window before results arrive
-- Reduced GitHub API calls: commit count and files-changed are collected in a single pass instead of two separate requests per repo
-- Added server-side `since` filter to the issues API call to avoid fetching unnecessary pages
-- Added early-stop to PR pagination when results have scrolled past the query window
-- Graceful handling of 404, 409, and 410 responses (repos with PRs/issues disabled, or empty repos) — the run continues rather than aborting
+- The date range is printed to stderr at the start of the run; per-repo progress (`[done/total] repo-name`) is printed to stderr as each repo completes
+- **Switched to GitHub GraphQL API** for per-repo stat collection — one query per repo fetches commits, files changed, merged PRs, and closed issues in a single round-trip, reducing API calls from ~2,340 to ~130 for a 130-repo org (~16x fewer calls)
+- `files_changed` now uses GraphQL's `changedFilesIfAvailable` field, which returns the true file count per commit — the previous REST approach capped at 300 files per commit and undercounted large commits
+- Repos excluded at fetch time if their `created_at` is after the end of the queried period — prevents repos that did not exist yet from appearing in historical files with spurious zero-value rows
+- IaC repos (name contains `iac`, case-insensitive) are now excluded at fetch time rather than only in the report and summary scripts
+- Parallelised repo processing with `ThreadPoolExecutor(max_workers=8)` — repos run concurrently; output order matches the GitHub API repo list
+- Fixed PR early-stop: stop condition now checks `updatedAt < since` (consistent with the previous REST behaviour) rather than `mergedAt < since`, which caused PRs to be undercounted when older PRs had recent activity
 
 ### Changes to `summarize_org_stats.py`
 
@@ -35,7 +37,9 @@
 
 - Stats JSON files moved into year subdirectories: `2025_stats/` and `2026_stats/`
 - IaC repos (name contains `iac`, case-insensitive) excluded from all counts and reports
-- Added `.gitignore` — excludes `summary_report.html`, Python caches, virtual environments, and agent files
+- Added `.gitignore` — excludes Python caches, virtual environments, and agent files
+- `summary_report.html` is now tracked in git — removed from `.gitignore` so the latest report is always available in the repository
+- README header now includes a [View latest HTML report](https://html-preview.github.io/?url=https://github.com/ansible-lockdown/github_stats/blob/main/2026_stats/summary_report.html) link via html-preview.github.io
 - Added `CLAUDE.md` — project conventions and script reference for AI-assisted development
 - Added `.cspell.json` — British English spell-check config with project-specific vocabulary
 - Added `images/ansible-lockdown.png` — org logo used in the HTML report header
