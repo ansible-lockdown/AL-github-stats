@@ -24,7 +24,8 @@ Example:
     "full_name":     "myorg/repo‑name",
     "commits":       23,
     "prs_merged":    4,
-    "issues_closed": 12
+    "issues_closed": 12,
+    "files_changed": 156
   },
   …
 ]
@@ -41,6 +42,8 @@ jq '[.[] | .prs_merged] | add' november_org.json
 count number of commits
 jq '[.[] | .commits] | add' november_org.json
 1515
+count number of files changed
+jq '[.[] | .files_changed] | add' november_org.json
 number of repos
 grep -c \"name\": november_org.json
 """
@@ -129,7 +132,7 @@ def _count_merged_prs(owner: str, repo: str, since: datetime.datetime, token: st
         p
         for p in pulls
         if p.get("merged_at") is not None
-        and datetime.datetime.fromisoformat(p["merged_at"].rstrip("Z")) > since
+        and datetime.datetime.fromisoformat(p["merged_at"].replace("Z", "+00:00")) > since
     ]
     return len(merged_recent)
 
@@ -147,9 +150,32 @@ def _count_closed_issues(owner: str, repo: str, since: datetime.datetime, token:
         if "pull_request" in issue:
             continue
         closed_at = issue.get("closed_at")
-        if closed_at and datetime.datetime.fromisoformat(closed_at.rstrip("Z")) > since:
+        if closed_at and datetime.datetime.fromisoformat(closed_at.replace("Z", "+00:00")) > since:
             closed_recent += 1
     return closed_recent
+
+
+def _count_files_changed(owner: str, repo: str, since: datetime.datetime, token: str) -> int:
+    """Count total file changes in the repo (sum of files touched per commit) after `since`."""
+    url = f"https://api.github.com/repos/{owner}/{repo}/commits"
+    headers = {"Authorization": f"token {token}"}
+    params = {"since": since.isoformat() + "Z", "per_page": "100"}
+    commits = _get_paginated_json(url, headers, params)
+    total = 0
+    session = requests.Session()
+    session.headers.update(headers)
+    for c in commits:
+        sha = c.get("sha")
+        if not sha:
+            continue
+        commit_url = f"https://api.github.com/repos/{owner}/{repo}/commits/{sha}"
+        resp = session.get(commit_url)
+        if resp.status_code != 200:
+            continue  # skip on error to avoid failing the whole run
+        data = resp.json()
+        files = data.get("files") or []
+        total += len(files)
+    return total
 
 
 # ----------------------- #
@@ -161,6 +187,7 @@ def parse_args() -> argparse.Namespace:
         description="GitHub monthly statistics for every repo in an org"
     )
     parser.add_argument("--org", required=True, help="GitHub organisation name")
+    parser.add_argument("--days", type=int, default=30, help="Number of days to check for default - last 30 days")
     parser.add_argument("--token", default=None, help="GitHub PAT (or GITHUB_TOKEN env)")
     return parser.parse_args()
 
@@ -175,6 +202,8 @@ def main() -> None:
     if not token:
         sys.exit("No GitHub token supplied. Set --token or GITHUB_TOKEN env var.")
 
+    days = args.days
+
     org = args.org
 
     # 4a. Pull all repos in the org (public & private – token required)
@@ -183,8 +212,8 @@ def main() -> None:
     repos: List[Dict] = _get_paginated_json(base_org_url, headers, {"per_page": "100", "type": "all"})
 
     # 4b. Work out the “last month” window (30 days, UTC)
-    now = datetime.datetime.utcnow()
-    since = now - datetime.timedelta(days=30)
+    now = datetime.datetime.now(datetime.timezone.utc)
+    since = now - datetime.timedelta(days=days)
 
     # 4c. Iterate over every repo, collect stats, and build the output
     results = []
@@ -195,6 +224,7 @@ def main() -> None:
         commits = _count_commits(owner, name, since, token)
         prs_merged = _count_merged_prs(owner, name, since, token)
         issues_closed = _count_closed_issues(owner, name, since, token)
+        files_changed = _count_files_changed(owner, name, since, token)
 
         results.append(
             {
@@ -203,6 +233,7 @@ def main() -> None:
                 "commits": commits,
                 "prs_merged": prs_merged,
                 "issues_closed": issues_closed,
+                "files_changed": files_changed,
             }
         )
 
