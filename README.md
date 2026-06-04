@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://html-preview.github.io/?url=https://github.com/ansible-lockdown/github_stats/blob/main/2026_stats/summary_report.html">
+  <a href="https://rawcdn.githack.com/ansible-lockdown/AL-github-stats/refs/heads/main/2026_stats/summary_report.html?token=GHSAT0AAAAAADK6NP3RP7VVKKRYY45XW3442RBTCTQ">
     View latest HTML report
   </a>
 </p>
@@ -218,7 +218,7 @@ The HTML report includes:
 - A collapsible **New Repos** section per card, listing repos that did not appear in the previous month
 - An **Overall Totals** card summing activity across all months (repo count taken from the latest month)
 
-> `summary_report.html` is generated — it is gitignored and should not be committed.
+> `summary_report.html` is a generated file tracked in git — commit it after regenerating to keep the hosted preview current.
 
 ---
 

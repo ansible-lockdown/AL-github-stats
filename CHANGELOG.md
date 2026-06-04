@@ -39,7 +39,7 @@
 - IaC repos (name contains `iac`, case-insensitive) excluded from all counts and reports
 - Added `.gitignore` — excludes Python caches, virtual environments, and agent files
 - `summary_report.html` is now tracked in git — removed from `.gitignore` so the latest report is always available in the repository
-- README header now includes a [View latest HTML report](https://html-preview.github.io/?url=https://github.com/ansible-lockdown/github_stats/blob/main/2026_stats/summary_report.html) link via html-preview.github.io
+- README header now includes a [View latest HTML report](https://rawcdn.githack.com/ansible-lockdown/AL-github-stats/refs/heads/main/2026_stats/summary_report.html) link via rawcdn.githack.com
 - Added `CLAUDE.md` — project conventions and script reference for AI-assisted development
 - Added `.cspell.json` — British English spell-check config with project-specific vocabulary
 - Added `images/ansible-lockdown.png` — org logo used in the HTML report header
