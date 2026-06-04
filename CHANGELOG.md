@@ -32,6 +32,8 @@
 ### Changes to `monthly_summary_report.py`
 
 - Loads both new `{period, repos}` object format and old bare array format
+- Report title and header now include the year derived from the data (e.g. "2026 Monthly Summary Statistics")
+- Header logo now loads from the GitHub org avatar URL instead of a local file, so the report renders correctly when viewed via rawcdn.githack.com or any hosted URL
 
 ### Data
 

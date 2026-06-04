@@ -374,7 +374,7 @@ def _new_repos_html(new_names: set[str], groups: dict[str, list[dict]]) -> str:
     )
 
 
-def _build_html(month_sections: list[tuple[str, dict, set]], image_rel: str) -> str:
+def _build_html(month_sections: list[tuple[str, dict, set]], image_url: str, year: int) -> str:
     overall: dict[str, dict[str, int]] = {
         "Linux OS": {"repos": 0, "commits": 0, "prs_merged": 0, "issues_closed": 0, "files_changed": 0},
         "Windows":  {"repos": 0, "commits": 0, "prs_merged": 0, "issues_closed": 0, "files_changed": 0},
@@ -440,14 +440,14 @@ def _build_html(month_sections: list[tuple[str, dict, set]], image_rel: str) -> 
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ansible-Lockdown Repos - Monthly Summary Statistics</title>
-<link rel="icon" type="image/png" href="{image_rel}">
+<title>Ansible-Lockdown Repos - {year} Monthly Summary Statistics</title>
+<link rel="icon" type="image/png" href="{image_url}">
 <style>{CSS}</style>
 </head>
 <body>
 <header>
-  <img src="{image_rel}" alt="Ansible Lockdown">
-  <h1>Ansible-Lockdown Repos - Monthly Summary Statistics</h1>
+  <img src="{image_url}" alt="Ansible Lockdown">
+  <h1>Ansible-Lockdown Repos - {year} Monthly Summary Statistics</h1>
 </header>
 <main>
 {cards}
@@ -498,8 +498,9 @@ def main() -> None:
         month_sections.append((display, groups, new_names))
         prev_names = current_names
 
-    image_rel = "../images/ansible-lockdown.png"
-    html = _build_html(month_sections, image_rel)
+    image_url = "https://avatars.githubusercontent.com/u/44685016?s=200&v=4"
+    report_year = month_data[0][0]
+    html = _build_html(month_sections, image_url, report_year)
 
     out_path = stats_dir / "summary_report.html"
     out_path.write_text(html, encoding="utf-8")
