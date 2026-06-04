@@ -13,7 +13,7 @@
     View 2026 HTML report
   </a>
   &nbsp;|&nbsp;
-  <a href="https://rawcdn.githack.com/ansible-lockdown/AL-github-stats/refs/heads/main/2025_stats/summary_report.html?token=GHSAT0AAAAAADK6NP3RUCCPMDS6U7WIF3642RBTSKQ">
+  <a href="https://rawcdn.githack.com/ansible-lockdown/AL-github-stats/refs/heads/main/2025_stats/summary_report.html?token=GHSAT0AAAAAADK6NP3QM4E5VGZDU6OLIDL22RBTYMQ">
     View 2025 HTML report
   </a>
 </p>
