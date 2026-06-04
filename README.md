@@ -1,155 +1,162 @@
-# GitHub organization stats
+<p align="center">
+  <img src="images/ansible-lockdown.png" alt="Ansible Lockdown" width="120">
+</p>
 
-Three scripts: one fetches per-repo stats from the GitHub API; one summarizes that data by repo type; one reports files changed in a single repo.
+<h1 align="center">Ansible Lockdown — GitHub Org Stats</h1>
+
+<p align="center">
+  Python scripts to collect, summarise, and report on GitHub activity across the <strong>ansible-lockdown</strong> organisation.
+</p>
+
+---
+
+## Contents
+
+- [Overview](#overview)
+- [Requirements](#requirements)
+- [Authentication](#authentication)
+- [Typical workflow](#typical-workflow)
+- [Scripts](#scripts)
+  - [github_monthly_org_stats.py](#github_monthly_org_statspy)
+  - [summarize_org_stats.py](#summarize_org_statspy)
+  - [monthly_summary_report.py](#monthly_summary_reportpy)
+  - [repo_files_changed.py](#repo_files_changedpy)
+- [Querying JSON output](#querying-json-output)
+- [Notes](#notes)
+
+---
+
+## Overview
 
 | Script | Purpose |
 | ------ | ------- |
-| `github_monthly_org_stats.py` | Fetch commits, merged PRs, closed issues, and files changed for every repo in an org (last N days). Outputs JSON to stdout. |
-| `summarize_org_stats.py` | Read that JSON and print totals grouped by Linux OS, Windows, and Other repos. |
-| `repo_files_changed.py` | Count files changed in one repository over the last N days (requires `--org` and `--repo`). |
+| `github_monthly_org_stats.py` | Fetch commits, merged PRs, closed issues, and files changed for every repo in the org. Outputs JSON. |
+| `summarize_org_stats.py` | Read a single JSON file and print totals grouped by Linux OS, Windows, and Other. |
+| `monthly_summary_report.py` | Read all monthly JSON files in a directory and generate a self-contained HTML report. |
+| `repo_files_changed.py` | Detailed file-change breakdown for a single repository. |
 
-**Typical workflow:**
+---
+
+## Requirements
+
+- Python 3.10+
+- [`requests`](https://pypi.org/project/requests/) — used by the fetch scripts
 
 ```bash
-# 1. Fetch org stats (requires GITHUB_TOKEN or --token)
-python3 github_monthly_org_stats.py --org myorg --days 30 > monthly_stats.json
-
-# 2. Summarize by Linux / Windows / Other
-python3 summarize_org_stats.py monthly_stats.json
+pip install requests
 ```
 
 ---
 
-## Script 1: `github_monthly_org_stats.py`
+## Authentication
 
-Prints the number of commits, merged PRs, closed issues, and files changed for the last N days for every repository in a GitHub organization.
+A GitHub Personal Access Token (PAT) is required. Use one with the `repo` scope to include private repositories.
 
-### Requirements
-
-- Python 3
-- [requests](https://pypi.org/project/requests/) — install with: `pip install requests`
-
-### Authentication
-
-A GitHub Personal Access Token (PAT) is required. Use one with the `repo` scope if you need to include private repositories.
-
-Provide the token either:
-
-- via the `--token` option, or  
-- via the `GITHUB_TOKEN` environment variable.
-
-### Usage
-
-**Basic:**
+Supply it either via the `--token` flag or the `GITHUB_TOKEN` environment variable:
 
 ```bash
-python3 github_monthly_org_stats.py --org <org_name>
+export GITHUB_TOKEN=ghp_your_token_here
 ```
+
+---
+
+## Typical workflow
+
+```bash
+# 1. Fetch stats for a specific month and save to the relevant year directory
+python3 github_monthly_org_stats.py --org ansible-lockdown --month May --year 2026 > 2026_stats/may26_stats.json
+
+# 2. (Optional) Quick terminal summary for that file
+python3 summarize_org_stats.py 2026_stats/may26_stats.json
+
+# 3. Generate the full HTML report across all months
+python3 monthly_summary_report.py --dir 2026_stats
+open 2026_stats/summary_report.html
+```
+
+---
+
+## Scripts
+
+### `github_monthly_org_stats.py`
+
+Fetches commits, merged PRs, closed issues, and files changed for **every repository** in a GitHub organisation. Outputs a JSON array to stdout.
 
 **Options:**
 
-| Option    | Required | Default | Description                          |
-| --------- | -------- | ------- | ------------------------------------ |
-| `--org`   | Yes      | —       | GitHub organization name             |
-| `--days`  | No       | 30      | Number of days to look back          |
-| `--token` | No       | —       | GitHub PAT (else use `GITHUB_TOKEN`)  |
+| Option | Required | Default | Description |
+| ------ | -------- | ------- | ----------- |
+| `--org` | Yes | — | GitHub organisation name |
+| `--days` | No | 30 | Days to look back (ignored when `--month` is set) |
+| `--month` | No | — | Calendar month: `May`, `may`, `feb`, or `5` |
+| `--year` | No | Current year | Year to use with `--month` |
+| `--token` | No | — | GitHub PAT (or use `GITHUB_TOKEN`) |
 
-**Example with redirect:**
+**Examples:**
 
 ```bash
-python3 github_monthly_org_stats.py --org myorg > monthly_stats.json
+# Last 30 days
+python3 github_monthly_org_stats.py --org ansible-lockdown > monthly_stats.json
+
+# Specific month
+python3 github_monthly_org_stats.py --org ansible-lockdown --month May --year 2026 > 2026_stats/may26_stats.json
+
+# Previous month by number
+python3 github_monthly_org_stats.py --org ansible-lockdown --month 11 --year 2025 > 2025_stats/nov25_stats.json
 ```
 
-### Output
-
-A JSON array is printed to stdout — one object per repository.
-
-**Example:**
+**Output format:**
 
 ```json
-[
-  {
-    "name": "repo-name",
-    "full_name": "myorg/repo-name",
-    "commits": 23,
-    "prs_merged": 4,
-    "issues_closed": 12,
-    "files_changed": 156
-  }
-]
+{
+  "period": "1st May 2026 - 31st May 2026",
+  "repos": [
+    {
+      "name": "RHEL9-STIG",
+      "full_name": "ansible-lockdown/RHEL9-STIG",
+      "commits": 23,
+      "prs_merged": 4,
+      "issues_closed": 12,
+      "files_changed": 156
+    }
+  ]
+}
 ```
 
-### Querying the output (jq)
-
-With the output saved to a file (e.g. `november_org.json`):
-
-**Sum issues closed:**
-
-```bash
-jq '[.[] | .issues_closed] | add' november_org.json
-```
-
-**Sum PRs merged:**
-
-```bash
-jq '[.[] | .prs_merged] | add' november_org.json
-```
-
-**Sum commits:**
-
-```bash
-jq '[.[] | .commits] | add' november_org.json
-```
-
-**Sum files changed:**
-
-```bash
-jq '[.[] | .files_changed] | add' november_org.json
-```
-
-**Number of repos:**
-
-```bash
-grep -c '"name":' november_org.json
-```
-
-### Notes
-
-The script uses the GitHub API with pagination and respects rate limits when a token is supplied.
+The `period` field records the exact date range queried. The script also prints the date range to stderr during the run so you can confirm the window without opening the file.
 
 ---
 
-## Script 2: `summarize_org_stats.py`
+### `summarize_org_stats.py`
 
-Reads a JSON file produced by `github_monthly_org_stats.py` and prints summary totals for three groups:
+Reads a JSON file produced by `github_monthly_org_stats.py` and prints totals for three repo groups:
 
-- **Linux OS** — Repos whose name indicates a Linux OS: RHEL, Ubuntu, Debian, Suse, Amazon2, Amazon2023.
-- **Windows** — Repos whose name contains `"windows"` and at least one digit (e.g. Windows-2019, Windows-10).
-- **Other** — All other repos (including names with "windows" but no number).
+- **Linux OS** — RHEL, Ubuntu, Debian, SUSE, Amazon2, Amazon2023
+- **Windows** — repo name contains `windows` and at least one digit (e.g. `Windows-2019-STIG`)
+- **Other** — everything else (shared tooling, docs, meta repos)
 
-No extra dependencies; uses the standard library only.
+No extra dependencies.
 
-### Usage
+**Usage:**
 
 ```bash
 python3 summarize_org_stats.py <path-to-json>
 ```
 
-**Examples:**
+**Example:**
 
 ```bash
-python3 summarize_org_stats.py monthly_stats.json
-python3 summarize_org_stats.py Jan26_org.json
+python3 summarize_org_stats.py 2026_stats/may26_stats.json
 ```
 
 **Example output:**
 
 ```
-Summary for: Jan26_org.json
+Summary for: 2026_stats/may26_stats.json
 
 Linux OS repos (RHEL, Ubuntu, Debian, Suse, Amazon2, Amazon2023)
 --------------------------------------------------
-  Repos:         61
+  Repos:         88
   Commits:       253
   Issues closed: 25
   PRs merged:    98
@@ -159,44 +166,69 @@ Windows repos (name contains 'windows' and a number)
 --------------------------------------------------
   Repos:         27
   ...
+
 Other (not Linux OS or Windows)
 --------------------------------------------------
-  Repos:         41
+  Repos:         38
   ...
 ```
 
 ---
 
-## Script 3: `repo_files_changed.py`
+### `monthly_summary_report.py`
 
-Counts how many files were changed in a **single** repository over the last N days. Uses the GitHub API to list commits in that period, then fetches each commit’s file list and aggregates totals.
+Scans a directory for all `*_stats.json` files, classifies repos by OS type, and writes a **self-contained HTML report** (`summary_report.html`) into that directory. Months are sorted chronologically. Re-run any time to pick up new monthly files.
 
-Requires the same PAT as Script 1 (`--token` or `GITHUB_TOKEN`). One API request is made per commit; large `--days` or very active repos may hit rate limits.
+Repo classification follows the same rules as `summarize_org_stats.py`. IaC repos (name contains `iac`) are excluded from all counts.
 
-### Usage
+**Options:**
+
+| Option | Required | Default | Description |
+| ------ | -------- | ------- | ----------- |
+| `--dir` | No | `2026_stats` | Directory containing `*_stats.json` files |
+
+**Usage:**
 
 ```bash
-python3 repo_files_changed.py --org <org_name> --repo <repo_name> [--days 30] [--token <PAT>]
+python3 monthly_summary_report.py --dir 2026_stats
+open 2026_stats/summary_report.html
 ```
 
-| Option    | Required | Default | Description                          |
-| --------- | -------- | ------- | ------------------------------------ |
-| `--org`   | Yes      | —       | GitHub organization name             |
-| `--repo`  | Yes      | —       | Repository name                      |
-| `--days`  | No       | 30      | Number of days to look back          |
-| `--token` | No       | —       | GitHub PAT (else use `GITHUB_TOKEN`)  |
+The HTML report includes:
+- The Ansible Lockdown logo and title in the header
+- One card per month showing a Linux OS / Windows / Other / **Total** breakdown
+- A collapsible **Repo breakdown** section per card, grouping repos by OS family, benchmark type (STIG/CIS), and variant (Audit/Private)
+- A collapsible **New Repos** section per card, listing repos that did not appear in the previous month
+- An **Overall Totals** card summing activity across all months (repo count taken from the latest month)
+
+> `summary_report.html` is generated — it is gitignored and should not be committed.
+
+---
+
+### `repo_files_changed.py`
+
+Counts files changed in a **single repository** over the last N days. Fetches the commit list then retrieves each commit individually to get its file list. Makes one API call per commit — large `--days` values on active repos may hit rate limits.
+
+**Options:**
+
+| Option | Required | Default | Description |
+| ------ | -------- | ------- | ----------- |
+| `--org` | Yes | — | GitHub organisation name |
+| `--repo` | Yes | — | Repository name |
+| `--days` | No | 30 | Days to look back |
+| `--token` | No | — | GitHub PAT (or use `GITHUB_TOKEN`) |
 
 **Example:**
 
 ```bash
-python3 repo_files_changed.py --org myorg --repo myrepo --days 30
+python3 repo_files_changed.py --org ansible-lockdown --repo RHEL9-STIG --days 30
 ```
 
 **Example output:**
 
 ```
-Repo: myorg/myrepo
-Period: last 30 days (since 2025-01-13T12:00:00+00:00)
+Repo: ansible-lockdown/RHEL9-STIG
+Period: last 30 days (since 2026-05-04T12:00:00+00:00)
 Commits: 42
 Total file changes: 156
 Unique files changed: 89
@@ -204,6 +236,34 @@ Unique files changed: 89
 
 ---
 
+## Querying JSON output
+
+With a stats file saved (e.g. `2026_stats/may26_stats.json`):
+
+```bash
+# Show the period covered
+jq '.period' 2026_stats/may26_stats.json
+
+# Total issues closed
+jq '[.repos[] | .issues_closed] | add' 2026_stats/may26_stats.json
+
+# Total PRs merged
+jq '[.repos[] | .prs_merged] | add' 2026_stats/may26_stats.json
+
+# Total commits
+jq '[.repos[] | .commits] | add' 2026_stats/may26_stats.json
+
+# Total files changed
+jq '[.repos[] | .files_changed] | add' 2026_stats/may26_stats.json
+
+# Number of repos
+jq '.repos | length' 2026_stats/may26_stats.json
+```
+
+---
+
 ## Notes
 
-`github_monthly_org_stats.py` and `repo_files_changed.py` use the GitHub API with pagination and respect rate limits when a token is supplied. For `repo_files_changed.py`, using a large `--days` value on a busy repo can result in many API calls (one per commit).
+- `github_monthly_org_stats.py` handles GitHub API pagination automatically and skips repos that return 404 (PRs/issues disabled), 409 (empty repo), or 410 (feature disabled) without aborting the run.
+- Stats JSON files should be saved into year subdirectories: `2025_stats/`, `2026_stats/`, etc.
+- The `monthly_summary_report.py` script accepts both full month names (`january`) and 3-letter abbreviations (`jan`) in filenames.

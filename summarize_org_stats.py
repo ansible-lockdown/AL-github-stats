@@ -54,10 +54,22 @@ def main() -> None:
         sys.exit(f"File not found: {args.json_file}")
 
     with open(args.json_file) as f:
-        repos = json.load(f)
+        data = json.load(f)
 
-    if not isinstance(repos, list):
-        sys.exit("JSON must be an array of repo objects.")
+    if isinstance(data, dict):
+        period = data.get("period")
+        repos = data.get("repos", [])
+        if not isinstance(repos, list):
+            sys.exit("JSON 'repos' key must be an array.")
+    elif isinstance(data, list):
+        period = None
+        repos = data
+    else:
+        sys.exit("Unrecognised JSON format — expected an array or {period, repos} object.")
+
+    print(f"Summary for: {args.json_file}")
+    if period:
+        print(f"Period:      {period}")
 
     linux_repos = []
     windows_repos = []
@@ -90,7 +102,6 @@ def main() -> None:
         print(f"  PRs merged:    {prs}")
         print(f"  Files changed: {files}")
 
-    print(f"Summary for: {args.json_file}")
     print_section(
         "Linux OS repos (RHEL, Ubuntu, Debian, Suse, Amazon2, Amazon2023)",
         linux_repos,

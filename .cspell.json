@@ -1,0 +1,26 @@
+{
+  "version": "0.2",
+  "language": "en,en-GB",
+  "words": [
+    "ansible",
+    "lockdown",
+    "ansible-lockdown",
+    "STIG",
+    "CIS",
+    "RHEL",
+    "Ubuntu",
+    "Debian",
+    "SUSE",
+    "paginated",
+    "gitignore",
+    "isoformat",
+    "fromisoformat"
+  ],
+  "ignorePaths": [
+    "2025_stats/**",
+    "2026_stats/**",
+    "*.json",
+    ".git/**",
+    "__pycache__/**"
+  ]
+}

@@ -81,9 +81,14 @@ def _get_paginated_json(
     session = requests.Session()
     session.headers.update(headers)
 
+    # 404 = repo/feature not found, 409 = empty repo, 410 = feature disabled
+    _EMPTY = {404, 409, 410}
+
     first_call = True
     while url:
         resp = session.get(url, params=params if first_call else None)
+        if resp.status_code in _EMPTY:
+            return []
         if resp.status_code != 200:
             sys.exit(f"GitHub API error {resp.status_code} – {resp.text}")
 
@@ -93,7 +98,7 @@ def _get_paginated_json(
 
         results.extend(page)
 
-        # Pagination – look for the “next” rel
+        # Pagination – look for the "next" rel
         link_header = resp.headers.get("Link", "")
         next_url = None
         if link_header:
@@ -112,70 +117,135 @@ def _get_paginated_json(
 # 2. Statistics helpers (commits, PRs, issues) #
 # ---------------------------------------------#
 
-def _count_commits(owner: str, repo: str, since: datetime.datetime, token: str) -> int:
-    """Count commits in the repo that happened after `since`."""
+def _collect_commit_stats(
+    owner: str, repo: str, since: datetime.datetime, token: str,
+    until: datetime.datetime | None = None,
+) -> tuple[int, int]:
+    """Return (commit_count, files_changed) in one pass — fetches the commit list once."""
     url = f"https://api.github.com/repos/{owner}/{repo}/commits"
     headers = {"Authorization": f"token {token}"}
-    params = {"since": since.isoformat() + "Z"}
+    params: Dict[str, str] = {"since": since.isoformat(), "per_page": "100"}
+    if until:
+        params["until"] = until.isoformat()
     commits = _get_paginated_json(url, headers, params)
-    return len(commits)
 
-
-def _count_merged_prs(owner: str, repo: str, since: datetime.datetime, token: str) -> int:
-    """Count PRs that were merged after `since`."""
-    url = f"https://api.github.com/repos/{owner}/{repo}/pulls"
-    headers = {"Authorization": f"token {token}"}
-    params = {"state": "closed", "per_page": "100"}
-    pulls = _get_paginated_json(url, headers, params)
-
-    merged_recent = [
-        p
-        for p in pulls
-        if p.get("merged_at") is not None
-        and datetime.datetime.fromisoformat(p["merged_at"].replace("Z", "+00:00")) > since
-    ]
-    return len(merged_recent)
-
-
-def _count_closed_issues(owner: str, repo: str, since: datetime.datetime, token: str) -> int:
-    """Count issues (excluding PRs) that were closed after `since`."""
-    url = f"https://api.github.com/repos/{owner}/{repo}/issues"
-    headers = {"Authorization": f"token {token}"}
-    params = {"state": "closed", "per_page": "100"}
-    issues = _get_paginated_json(url, headers, params)
-
-    closed_recent = 0
-    for issue in issues:
-        # Pull requests appear as issues – skip them
-        if "pull_request" in issue:
-            continue
-        closed_at = issue.get("closed_at")
-        if closed_at and datetime.datetime.fromisoformat(closed_at.replace("Z", "+00:00")) > since:
-            closed_recent += 1
-    return closed_recent
-
-
-def _count_files_changed(owner: str, repo: str, since: datetime.datetime, token: str) -> int:
-    """Count total file changes in the repo (sum of files touched per commit) after `since`."""
-    url = f"https://api.github.com/repos/{owner}/{repo}/commits"
-    headers = {"Authorization": f"token {token}"}
-    params = {"since": since.isoformat() + "Z", "per_page": "100"}
-    commits = _get_paginated_json(url, headers, params)
-    total = 0
+    total_files = 0
     session = requests.Session()
     session.headers.update(headers)
     for c in commits:
         sha = c.get("sha")
         if not sha:
             continue
-        commit_url = f"https://api.github.com/repos/{owner}/{repo}/commits/{sha}"
-        resp = session.get(commit_url)
+        resp = session.get(f"https://api.github.com/repos/{owner}/{repo}/commits/{sha}")
         if resp.status_code != 200:
-            continue  # skip on error to avoid failing the whole run
-        data = resp.json()
-        files = data.get("files") or []
-        total += len(files)
-    return total
+            continue
+        total_files += len(resp.json().get("files") or [])
+
+    return len(commits), total_files
+
+
+def _count_merged_prs(
+    owner: str, repo: str, since: datetime.datetime, token: str,
+    until: datetime.datetime | None = None,
+) -> int:
+    """Count PRs merged between `since` and `until`.
+
+    Sorts by updated descending and stops paginating once updated_at drops
+    below `since` — safe because merged_at <= updated_at always holds.
+    """
+    url = f"https://api.github.com/repos/{owner}/{repo}/pulls"
+    headers = {"Authorization": f"token {token}"}
+    session = requests.Session()
+    session.headers.update(headers)
+    params: Dict[str, str] = {
+        "state": "closed", "per_page": "100",
+        "sort": "updated", "direction": "desc",
+    }
+
+    count = 0
+    first_call = True
+    while url:
+        resp = session.get(url, params=params if first_call else None)
+        if resp.status_code in {404, 409, 410}:
+            return 0
+        if resp.status_code != 200:
+            sys.exit(f"GitHub API error {resp.status_code} – {resp.text}")
+        page = resp.json()
+        first_call = False
+        stop = False
+        for p in page:
+            updated_at = p.get("updated_at", "")
+            if updated_at and datetime.datetime.fromisoformat(updated_at.replace("Z", "+00:00")) < since:
+                stop = True
+                break
+            merged_at = p.get("merged_at")
+            if not merged_at:
+                continue
+            merged_dt = datetime.datetime.fromisoformat(merged_at.replace("Z", "+00:00"))
+            if merged_dt > since and (until is None or merged_dt <= until):
+                count += 1
+        if stop:
+            break
+        link = resp.headers.get("Link", "")
+        url = next(
+            (part[part.find("<") + 1: part.find(">")] for part in link.split(",") if 'rel="next"' in part),
+            None,
+        )
+    return count
+
+
+def _count_closed_issues(
+    owner: str, repo: str, since: datetime.datetime, token: str,
+    until: datetime.datetime | None = None,
+) -> int:
+    """Count issues (excluding PRs) closed between `since` and `until`."""
+    url = f"https://api.github.com/repos/{owner}/{repo}/issues"
+    headers = {"Authorization": f"token {token}"}
+    # `since` filters by updated_at >= since; closed_at <= updated_at, so this
+    # safely excludes issues untouched before our window without missing any.
+    params = {"state": "closed", "per_page": "100", "since": since.isoformat()}
+    issues = _get_paginated_json(url, headers, params)
+
+    closed_recent = 0
+    for issue in issues:
+        if "pull_request" in issue:
+            continue
+        closed_at = issue.get("closed_at")
+        if not closed_at:
+            continue
+        closed_dt = datetime.datetime.fromisoformat(closed_at.replace("Z", "+00:00"))
+        if closed_dt > since and (until is None or closed_dt <= until):
+            closed_recent += 1
+    return closed_recent
+
+
+def _month_window(month: str, year: int) -> tuple[datetime.datetime, datetime.datetime]:
+    """Return (since, until) covering the full calendar month."""
+    import calendar
+    month_names = {m.lower(): i for i, m in enumerate(
+        ["", "january", "february", "march", "april", "may", "june",
+         "july", "august", "september", "october", "november", "december"]
+    ) if i}
+    month_abbrevs = {m[:3].lower(): i for m, i in month_names.items()}
+
+    key = month.strip().lower()
+    if key.isdigit():
+        month_num = int(key)
+    elif key in month_names:
+        month_num = month_names[key]
+    elif key in month_abbrevs:
+        month_num = month_abbrevs[key]
+    else:
+        sys.exit(f"Unrecognised month: '{month}'. Use a name (e.g. May) or number (1-12).")
+
+    if not 1 <= month_num <= 12:
+        sys.exit(f"Month number must be between 1 and 12, got {month_num}.")
+
+    tz = datetime.timezone.utc
+    since = datetime.datetime(year, month_num, 1, tzinfo=tz)
+    last_day = calendar.monthrange(year, month_num)[1]
+    until = datetime.datetime(year, month_num, last_day, 23, 59, 59, tzinfo=tz)
+    return since, until
 
 
 # ----------------------- #
@@ -187,7 +257,9 @@ def parse_args() -> argparse.Namespace:
         description="GitHub monthly statistics for every repo in an org"
     )
     parser.add_argument("--org", required=True, help="GitHub organisation name")
-    parser.add_argument("--days", type=int, default=30, help="Number of days to check for default - last 30 days")
+    parser.add_argument("--days", type=int, default=30, help="Number of days to look back (ignored when --month is set)")
+    parser.add_argument("--month", default=None, help="Calendar month to query, e.g. 'May' or '5'")
+    parser.add_argument("--year", type=int, default=None, help="Year for --month (default: current year)")
     parser.add_argument("--token", default=None, help="GitHub PAT (or GITHUB_TOKEN env)")
     return parser.parse_args()
 
@@ -202,8 +274,6 @@ def main() -> None:
     if not token:
         sys.exit("No GitHub token supplied. Set --token or GITHUB_TOKEN env var.")
 
-    days = args.days
-
     org = args.org
 
     # 4a. Pull all repos in the org (public & private – token required)
@@ -211,9 +281,25 @@ def main() -> None:
     headers = {"Authorization": f"token {token}"}
     repos: List[Dict] = _get_paginated_json(base_org_url, headers, {"per_page": "100", "type": "all"})
 
-    # 4b. Work out the “last month” window (30 days, UTC)
+    # 4b. Work out the time window
     now = datetime.datetime.now(datetime.timezone.utc)
-    since = now - datetime.timedelta(days=days)
+    if args.month:
+        year = args.year or now.year
+        since, until = _month_window(args.month, year)
+    else:
+        since = now - datetime.timedelta(days=args.days)
+        until = None
+
+    def _ordinal(n: int) -> str:
+        if 11 <= (n % 100) <= 13:
+            return f"{n}th"
+        return f"{n}" + ["th", "st", "nd", "rd", "th"][min(n % 10, 4)]
+
+    def _fmt(dt: datetime.datetime) -> str:
+        return f"{_ordinal(dt.day)}{dt.strftime('%b%Y')}"
+
+    until_display = until if until else now
+    print(f"Fetching stats: {_fmt(since)} - {_fmt(until_display)}", file=sys.stderr)
 
     # 4c. Iterate over every repo, collect stats, and build the output
     results = []
@@ -221,10 +307,9 @@ def main() -> None:
         name = repo["name"]
         owner = repo["owner"]["login"]
 
-        commits = _count_commits(owner, name, since, token)
-        prs_merged = _count_merged_prs(owner, name, since, token)
-        issues_closed = _count_closed_issues(owner, name, since, token)
-        files_changed = _count_files_changed(owner, name, since, token)
+        commits, files_changed = _collect_commit_stats(owner, name, since, token, until)
+        prs_merged = _count_merged_prs(owner, name, since, token, until)
+        issues_closed = _count_closed_issues(owner, name, since, token, until)
 
         results.append(
             {
@@ -237,8 +322,12 @@ def main() -> None:
             }
         )
 
-    # 4d. Pretty‑print the JSON array
-    print(json.dumps(results, indent=2))
+    # 4d. Pretty-print wrapped output
+    output = {
+        "period": f"{_fmt(since)} - {_fmt(until_display)}",
+        "repos": results,
+    }
+    print(json.dumps(output, indent=2))
 
 
 if __name__ == "__main__":
