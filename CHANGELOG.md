@@ -33,6 +33,12 @@
 
 - Loads both new `{period, repos}` object format and old bare array format
 
+### Data
+
+- Added full 2025 monthly stats (January–December) in `2025_stats/`
+- Added generated `2025_stats/summary_report.html` — 2025 HTML report now available via rawcdn.githack.com
+- README header updated with separate preview links for the 2025 and 2026 reports
+
 ### Project structure
 
 - Stats JSON files moved into year subdirectories: `2025_stats/` and `2026_stats/`

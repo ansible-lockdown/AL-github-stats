@@ -1,5 +1,5 @@
 {
-  "period": "1stNov2025 - 30thNov2025",
+  "period": "1stDec2025 - 31stDec2025",
   "repos": [
     {
       "name": "RHEL6-STIG",
@@ -108,18 +108,18 @@
     {
       "name": "RHEL8-CIS",
       "full_name": "ansible-lockdown/RHEL8-CIS",
-      "commits": 24,
-      "prs_merged": 7,
-      "issues_closed": 5,
-      "files_changed": 46
+      "commits": 9,
+      "prs_merged": 2,
+      "issues_closed": 0,
+      "files_changed": 23
     },
     {
       "name": "RHEL8-STIG",
       "full_name": "ansible-lockdown/RHEL8-STIG",
-      "commits": 7,
+      "commits": 4,
       "prs_merged": 2,
       "issues_closed": 0,
-      "files_changed": 7
+      "files_changed": 4
     },
     {
       "name": "APACHE-2.4-STIG",
@@ -156,10 +156,10 @@
     {
       "name": "UBUNTU18-CIS",
       "full_name": "ansible-lockdown/UBUNTU18-CIS",
-      "commits": 2,
-      "prs_merged": 2,
+      "commits": 0,
+      "prs_merged": 0,
       "issues_closed": 0,
-      "files_changed": 2
+      "files_changed": 0
     },
     {
       "name": "refactrci",
@@ -172,10 +172,10 @@
     {
       "name": "UBUNTU20-CIS",
       "full_name": "ansible-lockdown/UBUNTU20-CIS",
-      "commits": 4,
+      "commits": 2,
       "prs_merged": 2,
       "issues_closed": 0,
-      "files_changed": 4
+      "files_changed": 2
     },
     {
       "name": "Kubernetes1.6.1-CIS",
@@ -221,7 +221,7 @@
       "name": "RHEL8-CIS-Audit",
       "full_name": "ansible-lockdown/RHEL8-CIS-Audit",
       "commits": 0,
-      "prs_merged": 0,
+      "prs_merged": 1,
       "issues_closed": 0,
       "files_changed": 0
     },
@@ -316,18 +316,18 @@
     {
       "name": "RHEL9-CIS",
       "full_name": "ansible-lockdown/RHEL9-CIS",
-      "commits": 15,
-      "prs_merged": 3,
+      "commits": 27,
+      "prs_merged": 6,
       "issues_closed": 1,
-      "files_changed": 16
+      "files_changed": 46
     },
     {
       "name": "RHEL9-CIS-Audit",
       "full_name": "ansible-lockdown/RHEL9-CIS-Audit",
-      "commits": 3,
-      "prs_merged": 0,
-      "issues_closed": 0,
-      "files_changed": 3
+      "commits": 15,
+      "prs_merged": 4,
+      "issues_closed": 2,
+      "files_changed": 21
     },
     {
       "name": "benchmark-auditing-docs",
@@ -364,26 +364,26 @@
     {
       "name": "AMAZON2-CIS",
       "full_name": "ansible-lockdown/AMAZON2-CIS",
-      "commits": 7,
-      "prs_merged": 4,
+      "commits": 4,
+      "prs_merged": 3,
       "issues_closed": 0,
-      "files_changed": 7
+      "files_changed": 4
     },
     {
       "name": "UBUNTU22-CIS-Audit",
       "full_name": "ansible-lockdown/UBUNTU22-CIS-Audit",
-      "commits": 1,
+      "commits": 0,
       "prs_merged": 0,
       "issues_closed": 0,
-      "files_changed": 354
+      "files_changed": 0
     },
     {
       "name": "UBUNTU22-CIS",
       "full_name": "ansible-lockdown/UBUNTU22-CIS",
-      "commits": 6,
+      "commits": 18,
       "prs_merged": 3,
-      "issues_closed": 1,
-      "files_changed": 71
+      "issues_closed": 0,
+      "files_changed": 30
     },
     {
       "name": "KUBERNETES-STIG",
@@ -396,10 +396,10 @@
     {
       "name": "MPG-AL-READTHEDOCS",
       "full_name": "ansible-lockdown/MPG-AL-READTHEDOCS",
-      "commits": 2,
-      "prs_merged": 2,
+      "commits": 0,
+      "prs_merged": 0,
       "issues_closed": 0,
-      "files_changed": 2
+      "files_changed": 0
     },
     {
       "name": "Windows-2022-STIG",
@@ -468,10 +468,10 @@
     {
       "name": "AMAZON2023-CIS",
       "full_name": "ansible-lockdown/AMAZON2023-CIS",
-      "commits": 7,
-      "prs_merged": 5,
-      "issues_closed": 1,
-      "files_changed": 10
+      "commits": 6,
+      "prs_merged": 4,
+      "issues_closed": 0,
+      "files_changed": 6
     },
     {
       "name": "action.playbook",
@@ -508,10 +508,10 @@
     {
       "name": "Private-DEBIAN11-CIS",
       "full_name": "ansible-lockdown/Private-DEBIAN11-CIS",
-      "commits": 0,
-      "prs_merged": 0,
+      "commits": 7,
+      "prs_merged": 1,
       "issues_closed": 0,
-      "files_changed": 0
+      "files_changed": 19
     },
     {
       "name": "DEBIAN11-CIS",
@@ -524,18 +524,18 @@
     {
       "name": "Private-RHEL9-STIG",
       "full_name": "ansible-lockdown/Private-RHEL9-STIG",
-      "commits": 13,
+      "commits": 19,
       "prs_merged": 2,
       "issues_closed": 0,
-      "files_changed": 253
+      "files_changed": 69
     },
     {
       "name": "Private-RHEL8-STIG",
       "full_name": "ansible-lockdown/Private-RHEL8-STIG",
-      "commits": 4,
-      "prs_merged": 1,
+      "commits": 0,
+      "prs_merged": 0,
       "issues_closed": 0,
-      "files_changed": 25
+      "files_changed": 0
     },
     {
       "name": "Private-RHEL7-STIG",
@@ -564,18 +564,18 @@
     {
       "name": "RHEL9-STIG",
       "full_name": "ansible-lockdown/RHEL9-STIG",
-      "commits": 6,
+      "commits": 8,
       "prs_merged": 3,
-      "issues_closed": 0,
-      "files_changed": 6
+      "issues_closed": 1,
+      "files_changed": 20
     },
     {
       "name": "RHEL9-STIG-Audit",
       "full_name": "ansible-lockdown/RHEL9-STIG-Audit",
-      "commits": 10,
-      "prs_merged": 0,
+      "commits": 12,
+      "prs_merged": 2,
       "issues_closed": 0,
-      "files_changed": 46
+      "files_changed": 1093
     },
     {
       "name": "Private-Windows-2022-STIG",
@@ -596,10 +596,10 @@
     {
       "name": "Private-RHEL8-CIS",
       "full_name": "ansible-lockdown/Private-RHEL8-CIS",
-      "commits": 16,
-      "prs_merged": 1,
+      "commits": 3,
+      "prs_merged": 2,
       "issues_closed": 0,
-      "files_changed": 150
+      "files_changed": 19
     },
     {
       "name": "Private-Windows-2019-STIG",
@@ -636,26 +636,26 @@
     {
       "name": "Private-AMAZON2-CIS",
       "full_name": "ansible-lockdown/Private-AMAZON2-CIS",
-      "commits": 1,
-      "prs_merged": 1,
-      "issues_closed": 0,
-      "files_changed": 54
-    },
-    {
-      "name": "Private-DEBIAN12-CIS",
-      "full_name": "ansible-lockdown/Private-DEBIAN12-CIS",
       "commits": 0,
       "prs_merged": 0,
       "issues_closed": 0,
       "files_changed": 0
     },
     {
+      "name": "Private-DEBIAN12-CIS",
+      "full_name": "ansible-lockdown/Private-DEBIAN12-CIS",
+      "commits": 9,
+      "prs_merged": 2,
+      "issues_closed": 0,
+      "files_changed": 26
+    },
+    {
       "name": "DEBIAN12-CIS",
       "full_name": "ansible-lockdown/DEBIAN12-CIS",
-      "commits": 18,
-      "prs_merged": 11,
-      "issues_closed": 6,
-      "files_changed": 22
+      "commits": 14,
+      "prs_merged": 5,
+      "issues_closed": 0,
+      "files_changed": 26
     },
     {
       "name": "Private-RHEL7-CIS",
@@ -676,10 +676,10 @@
     {
       "name": "Private-UBUNTU22-CIS",
       "full_name": "ansible-lockdown/Private-UBUNTU22-CIS",
-      "commits": 7,
+      "commits": 18,
       "prs_merged": 1,
       "issues_closed": 0,
-      "files_changed": 135
+      "files_changed": 30
     },
     {
       "name": "Private-WIN-PDC-CIS-GPO",
@@ -692,10 +692,10 @@
     {
       "name": "UBUNTU24-CIS",
       "full_name": "ansible-lockdown/UBUNTU24-CIS",
-      "commits": 13,
-      "prs_merged": 5,
-      "issues_closed": 3,
-      "files_changed": 15
+      "commits": 34,
+      "prs_merged": 10,
+      "issues_closed": 2,
+      "files_changed": 67
     },
     {
       "name": "Private-Kubernetes-CIS",
@@ -724,10 +724,10 @@
     {
       "name": "Private-RHEL9-CIS",
       "full_name": "ansible-lockdown/Private-RHEL9-CIS",
-      "commits": 8,
-      "prs_merged": 2,
+      "commits": 9,
+      "prs_merged": 6,
       "issues_closed": 0,
-      "files_changed": 8
+      "files_changed": 23
     },
     {
       "name": "Private-Windows-2022-CIS",
@@ -740,50 +740,50 @@
     {
       "name": "DEBIAN12-CIS-Audit",
       "full_name": "ansible-lockdown/DEBIAN12-CIS-Audit",
-      "commits": 1,
-      "prs_merged": 1,
-      "issues_closed": 1,
-      "files_changed": 3
-    },
-    {
-      "name": "Private-UBUNTU24-CIS",
-      "full_name": "ansible-lockdown/Private-UBUNTU24-CIS",
-      "commits": 10,
-      "prs_merged": 2,
-      "issues_closed": 0,
-      "files_changed": 15
-    },
-    {
-      "name": "UBUNTU24-CIS-Audit",
-      "full_name": "ansible-lockdown/UBUNTU24-CIS-Audit",
-      "commits": 3,
-      "prs_merged": 0,
-      "issues_closed": 3,
-      "files_changed": 4
-    },
-    {
-      "name": "Private-Ubuntu22-STIG",
-      "full_name": "ansible-lockdown/Private-Ubuntu22-STIG",
       "commits": 0,
       "prs_merged": 0,
       "issues_closed": 0,
       "files_changed": 0
     },
     {
+      "name": "Private-UBUNTU24-CIS",
+      "full_name": "ansible-lockdown/Private-UBUNTU24-CIS",
+      "commits": 32,
+      "prs_merged": 7,
+      "issues_closed": 0,
+      "files_changed": 80
+    },
+    {
+      "name": "UBUNTU24-CIS-Audit",
+      "full_name": "ansible-lockdown/UBUNTU24-CIS-Audit",
+      "commits": 5,
+      "prs_merged": 6,
+      "issues_closed": 1,
+      "files_changed": 11
+    },
+    {
+      "name": "Private-Ubuntu22-STIG",
+      "full_name": "ansible-lockdown/Private-Ubuntu22-STIG",
+      "commits": 34,
+      "prs_merged": 3,
+      "issues_closed": 0,
+      "files_changed": 85
+    },
+    {
       "name": "UBUNTU22-STIG-Audit",
       "full_name": "ansible-lockdown/UBUNTU22-STIG-Audit",
-      "commits": 2,
-      "prs_merged": 1,
-      "issues_closed": 1,
-      "files_changed": 2
+      "commits": 11,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 73
     },
     {
       "name": "RHEL10-CIS",
       "full_name": "ansible-lockdown/RHEL10-CIS",
-      "commits": 21,
-      "prs_merged": 4,
+      "commits": 17,
+      "prs_merged": 5,
       "issues_closed": 0,
-      "files_changed": 25
+      "files_changed": 34
     },
     {
       "name": "Private-SUSE15-CIS",
@@ -828,10 +828,10 @@
     {
       "name": "UBUNTU22-STIG",
       "full_name": "ansible-lockdown/UBUNTU22-STIG",
-      "commits": 2,
-      "prs_merged": 1,
-      "issues_closed": 0,
-      "files_changed": 2
+      "commits": 42,
+      "prs_merged": 2,
+      "issues_closed": 1,
+      "files_changed": 61
     },
     {
       "name": "Private-UBUNTU20-CIS",
@@ -884,42 +884,42 @@
     {
       "name": "Private-UBUNTU24-STIG",
       "full_name": "ansible-lockdown/Private-UBUNTU24-STIG",
-      "commits": 0,
-      "prs_merged": 0,
+      "commits": 14,
+      "prs_merged": 1,
       "issues_closed": 0,
-      "files_changed": 0
+      "files_changed": 71
     },
     {
       "name": "Private-RHEL10-CIS",
       "full_name": "ansible-lockdown/Private-RHEL10-CIS",
-      "commits": 15,
-      "prs_merged": 2,
+      "commits": 8,
+      "prs_merged": 4,
       "issues_closed": 0,
-      "files_changed": 140
+      "files_changed": 21
     },
     {
       "name": "RHEL10-CIS-Audit",
       "full_name": "ansible-lockdown/RHEL10-CIS-Audit",
-      "commits": 1,
-      "prs_merged": 0,
+      "commits": 3,
+      "prs_merged": 1,
       "issues_closed": 0,
-      "files_changed": 1
+      "files_changed": 7
     },
     {
       "name": "UBUNTU24-STIG-Audit",
       "full_name": "ansible-lockdown/UBUNTU24-STIG-Audit",
-      "commits": 0,
+      "commits": 4,
       "prs_merged": 0,
       "issues_closed": 0,
-      "files_changed": 0
+      "files_changed": 49
     },
     {
       "name": "SUSE15-CIS",
       "full_name": "ansible-lockdown/SUSE15-CIS",
-      "commits": 0,
-      "prs_merged": 1,
-      "issues_closed": 5,
-      "files_changed": 0
+      "commits": 2,
+      "prs_merged": 2,
+      "issues_closed": 0,
+      "files_changed": 2
     },
     {
       "name": "Windows-Test",
@@ -934,16 +934,16 @@
       "full_name": "ansible-lockdown/Private-Windows-2025-CIS",
       "commits": 0,
       "prs_merged": 0,
-      "issues_closed": 1,
+      "issues_closed": 0,
       "files_changed": 0
     },
     {
       "name": "Windows-2025-CIS",
       "full_name": "ansible-lockdown/Windows-2025-CIS",
-      "commits": 1,
-      "prs_merged": 1,
+      "commits": 0,
+      "prs_merged": 0,
       "issues_closed": 0,
-      "files_changed": 49
+      "files_changed": 0
     },
     {
       "name": "-Benchmark_Templates-",
@@ -956,18 +956,18 @@
     {
       "name": "UBUNTU24-STIG",
       "full_name": "ansible-lockdown/UBUNTU24-STIG",
-      "commits": 2,
-      "prs_merged": 1,
+      "commits": 9,
+      "prs_merged": 4,
       "issues_closed": 0,
-      "files_changed": 2
+      "files_changed": 12
     },
     {
       "name": "ld-images",
       "full_name": "ansible-lockdown/ld-images",
-      "commits": 5,
-      "prs_merged": 2,
+      "commits": 0,
+      "prs_merged": 0,
       "issues_closed": 0,
-      "files_changed": 88
+      "files_changed": 0
     },
     {
       "name": "Private-Windows-2016-STIG",
@@ -976,6 +976,14 @@
       "prs_merged": 0,
       "issues_closed": 0,
       "files_changed": 0
+    },
+    {
+      "name": "Private-Debian13-CIS",
+      "full_name": "ansible-lockdown/Private-Debian13-CIS",
+      "commits": 7,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 143
     }
   ]
 }

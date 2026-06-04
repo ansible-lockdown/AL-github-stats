@@ -10,7 +10,11 @@
 
 <p align="center">
   <a href="https://rawcdn.githack.com/ansible-lockdown/AL-github-stats/refs/heads/main/2026_stats/summary_report.html?token=GHSAT0AAAAAADK6NP3RP7VVKKRYY45XW3442RBTCTQ">
-    View latest HTML report
+    View 2026 HTML report
+  </a>
+  &nbsp;|&nbsp;
+  <a href="https://rawcdn.githack.com/ansible-lockdown/AL-github-stats/refs/heads/main/2025_stats/summary_report.html">
+    View 2025 HTML report
   </a>
 </p>
 
