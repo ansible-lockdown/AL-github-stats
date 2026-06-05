@@ -16,7 +16,7 @@
 - Stats JSON files belong in year-named subdirectories: `2025_stats/`, `2026_stats/`, etc. Not in the project root.
 - `summary_report.html` is a generated file — it is tracked in git and should be committed when regenerated to keep the hosted preview current.
 - HTML preview URLs (service: rawcdn.githack.com):
-  - 2026: `https://rawcdn.githack.com/ansible-lockdown/AL-github-stats/refs/heads/main/2026_stats/summary_report.html?token=GHSAT0AAAAAADK6NP3RP7VVKKRYY45XW3442RBTCTQ`
+  - 2026: `https://rawcdn.githack.com/ansible-lockdown/AL-github-stats/refs/heads/main/2026_stats/summary_report.html?token=GHSAT0AAAAAADK6NP3QZP2RPVWH3BXCFOLC2RCVDDQ`
   - 2025: `https://rawcdn.githack.com/ansible-lockdown/AL-github-stats/refs/heads/main/2025_stats/summary_report.html?token=GHSAT0AAAAAADK6NP3QM4E5VGZDU6OLIDL22RBTYMQ`
 - Classification logic (Linux OS / Windows / Other) lives in `summarize_org_stats.py`. Import from there; do not duplicate.
 - The HTML report (`monthly_summary_report.py`) uses the GitHub org avatar (`https://avatars.githubusercontent.com/u/44685016?s=200&v=4`) as the header logo — not a local file.
