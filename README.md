@@ -9,11 +9,11 @@
 </p>
 
 <p align="center">
-  <a href="https://rawcdn.githack.com/ansible-lockdown/AL-github-stats/refs/heads/main/2026_stats/summary_report.html?token=GHSAT0AAAAAADK6NP3QHLCQJO4G75SMFZTC2SGHPLQ">
+  <a href="/2026_stats/summary_report.html">
     View 2026 HTML report
   </a>
   &nbsp;|&nbsp;
-  <a href="https://rawcdn.githack.com/ansible-lockdown/AL-github-stats/refs/heads/devel/2025_stats/summary_report.html?token=GHSAT0AAAAAADK6NP3R5L4WVI5XAXLSX3542SGHNSQ">
+  <a href="/2025_stats/summary_report.html">
     View 2025 HTML report
   </a>
 </p>
