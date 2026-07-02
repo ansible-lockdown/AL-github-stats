@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ansible Lockdown — GitHub Org Stats</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --card-bg: #161b22;
+    --border: #30363d;
+    --text: #c9d1d9;
+    --text-dim: #8b949e;
+    --accent: #58a6ff;
+    --accent-hover: #79c0ff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 48px 20px;
+    min-height: 100vh;
+  }
+  header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  header img {
+    max-width: 220px;
+    height: auto;
+    margin-bottom: 16px;
+  }
+  h1 {
+    font-size: 1.6rem;
+    margin: 0 0 8px;
+    color: #fff;
+  }
+  p.subtitle {
+    color: var(--text-dim);
+    margin: 0;
+    font-size: 0.95rem;
+  }
+  .reports {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    width: 100%;
+    max-width: 640px;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px 24px;
+    text-decoration: none;
+    color: var(--text);
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+  .card .year {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0 0 6px;
+  }
+  .card .label {
+    color: var(--accent);
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  footer {
+    margin-top: 48px;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    text-align: center;
+  }
+  footer a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  footer a:hover {
+    color: var(--accent-hover);
+  }
+</style>
+</head>
+<body>
+
+  <header>
+    <img src="images/ansible-lockdown.png" alt="Ansible Lockdown">
+    <h1>Ansible Lockdown — GitHub Org Stats</h1>
+    <p class="subtitle">Monthly commit, PR, and issue activity across the ansible-lockdown organisation</p>
+  </header>
+
+  <div class="reports">
+    <a class="card" href="2026_stats/summary_report.html">
+      <div class="year">2026</div>
+      <div class="label">View report →</div>
+    </a>
+    <a class="card" href="2025_stats/summary_report.html">
+      <div class="year">2025</div>
+      <div class="label">View report →</div>
+    </a>
+  </div>
+
+  <footer>
+    Generated with <a href="https://github.com/ansible-lockdown/AL-github-stats">AL-github-stats</a>
+  </footer>
+
+</body>
+</html>
