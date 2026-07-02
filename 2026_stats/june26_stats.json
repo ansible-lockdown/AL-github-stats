@@ -1,0 +1,1157 @@
+{
+  "period": "1stJun2026 - 30thJun2026",
+  "repos": [
+    {
+      "name": "RHEL6-STIG",
+      "full_name": "ansible-lockdown/RHEL6-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "RHEL5-STIG",
+      "full_name": "ansible-lockdown/RHEL5-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "RHEL7-CIS",
+      "full_name": "ansible-lockdown/RHEL7-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "RHEL7-STIG",
+      "full_name": "ansible-lockdown/RHEL7-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Windows-2012-Domain-Controller-STIG",
+      "full_name": "ansible-lockdown/Windows-2012-Domain-Controller-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Windows-2012-Member-Server-STIG",
+      "full_name": "ansible-lockdown/Windows-2012-Member-Server-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Windows-2008R2-Member-Server-STIG",
+      "full_name": "ansible-lockdown/Windows-2008R2-Member-Server-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "POSTGRES-9-STIG",
+      "full_name": "ansible-lockdown/POSTGRES-9-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "lockdown-linux",
+      "full_name": "ansible-lockdown/lockdown-linux",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Windows-2016-CIS",
+      "full_name": "ansible-lockdown/Windows-2016-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Windows-2016-STIG",
+      "full_name": "ansible-lockdown/Windows-2016-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Windows-2019-CIS",
+      "full_name": "ansible-lockdown/Windows-2019-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Windows-2019-STIG",
+      "full_name": "ansible-lockdown/Windows-2019-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "RHEL8-CIS",
+      "full_name": "ansible-lockdown/RHEL8-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "RHEL8-STIG",
+      "full_name": "ansible-lockdown/RHEL8-STIG",
+      "commits": 0,
+      "prs_merged": 1,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "APACHE-2.4-STIG",
+      "full_name": "ansible-lockdown/APACHE-2.4-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "TOMCAT-9-STIG",
+      "full_name": "ansible-lockdown/TOMCAT-9-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "APACHE-2.4-CIS",
+      "full_name": "ansible-lockdown/APACHE-2.4-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Benchmark-Generator",
+      "full_name": "ansible-lockdown/Benchmark-Generator",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "UBUNTU18-CIS",
+      "full_name": "ansible-lockdown/UBUNTU18-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "refactrci",
+      "full_name": "ansible-lockdown/refactrci",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "UBUNTU20-CIS",
+      "full_name": "ansible-lockdown/UBUNTU20-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Kubernetes1.6.1-CIS",
+      "full_name": "ansible-lockdown/Kubernetes1.6.1-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "POSTGRES-12-CIS",
+      "full_name": "ansible-lockdown/POSTGRES-12-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "RHEL7-STIG-Audit",
+      "full_name": "ansible-lockdown/RHEL7-STIG-Audit",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "RHEL7-CIS-Audit",
+      "full_name": "ansible-lockdown/RHEL7-CIS-Audit",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "UBUNTU18-STIG",
+      "full_name": "ansible-lockdown/UBUNTU18-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "RHEL8-CIS-Audit",
+      "full_name": "ansible-lockdown/RHEL8-CIS-Audit",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "AZURE-CIS",
+      "full_name": "ansible-lockdown/AZURE-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "AWS-FOUNDATIONS-CIS",
+      "full_name": "ansible-lockdown/AWS-FOUNDATIONS-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Windows-2016-CIS-Audit",
+      "full_name": "ansible-lockdown/Windows-2016-CIS-Audit",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "RHEL8-STIG-Audit",
+      "full_name": "ansible-lockdown/RHEL8-STIG-Audit",
+      "commits": 1,
+      "prs_merged": 1,
+      "issues_closed": 0,
+      "files_changed": 100
+    },
+    {
+      "name": "UBUNTU20-CIS-Audit",
+      "full_name": "ansible-lockdown/UBUNTU20-CIS-Audit",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "UBUNTU18-CIS-Audit",
+      "full_name": "ansible-lockdown/UBUNTU18-CIS-Audit",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Windows-2022-CIS",
+      "full_name": "ansible-lockdown/Windows-2022-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Windows-10-STIG",
+      "full_name": "ansible-lockdown/Windows-10-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Windows-2019-CIS-Audit",
+      "full_name": "ansible-lockdown/Windows-2019-CIS-Audit",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "WinFWADV-STIG-Audit",
+      "full_name": "ansible-lockdown/WinFWADV-STIG-Audit",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "WinFWADV-STIG",
+      "full_name": "ansible-lockdown/WinFWADV-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "RHEL9-CIS",
+      "full_name": "ansible-lockdown/RHEL9-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 1,
+      "files_changed": 0
+    },
+    {
+      "name": "RHEL9-CIS-Audit",
+      "full_name": "ansible-lockdown/RHEL9-CIS-Audit",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "benchmark-auditing-docs",
+      "full_name": "ansible-lockdown/benchmark-auditing-docs",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "CISCO-IOS-L2S-STIG",
+      "full_name": "ansible-lockdown/CISCO-IOS-L2S-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "CISCO-IOS-RTR-STIG",
+      "full_name": "ansible-lockdown/CISCO-IOS-RTR-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "AMAZON2-CIS-Audit",
+      "full_name": "ansible-lockdown/AMAZON2-CIS-Audit",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "AMAZON2-CIS",
+      "full_name": "ansible-lockdown/AMAZON2-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "UBUNTU22-CIS-Audit",
+      "full_name": "ansible-lockdown/UBUNTU22-CIS-Audit",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "UBUNTU22-CIS",
+      "full_name": "ansible-lockdown/UBUNTU22-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "KUBERNETES-STIG",
+      "full_name": "ansible-lockdown/KUBERNETES-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "MPG-AL-READTHEDOCS",
+      "full_name": "ansible-lockdown/MPG-AL-READTHEDOCS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Windows-2022-STIG",
+      "full_name": "ansible-lockdown/Windows-2022-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "UBUNTU20-STIG",
+      "full_name": "ansible-lockdown/UBUNTU20-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "NGINX-CIS",
+      "full_name": "ansible-lockdown/NGINX-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "repo_readme",
+      "full_name": "ansible-lockdown/repo_readme",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": ".github-private",
+      "full_name": "ansible-lockdown/.github-private",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": ".github",
+      "full_name": "ansible-lockdown/.github",
+      "commits": 1,
+      "prs_merged": 1,
+      "issues_closed": 0,
+      "files_changed": 9
+    },
+    {
+      "name": "AAP2-STIG",
+      "full_name": "ansible-lockdown/AAP2-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "ansible-sign",
+      "full_name": "ansible-lockdown/ansible-sign",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "AMAZON2023-CIS",
+      "full_name": "ansible-lockdown/AMAZON2023-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "action.playbook",
+      "full_name": "ansible-lockdown/action.playbook",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "AMAZON2023-CIS-Audit",
+      "full_name": "ansible-lockdown/AMAZON2023-CIS-Audit",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Windows-11-CIS",
+      "full_name": "ansible-lockdown/Windows-11-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Windows-10-CIS",
+      "full_name": "ansible-lockdown/Windows-10-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-DEBIAN11-CIS",
+      "full_name": "ansible-lockdown/Private-DEBIAN11-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "DEBIAN11-CIS",
+      "full_name": "ansible-lockdown/DEBIAN11-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-RHEL9-STIG",
+      "full_name": "ansible-lockdown/Private-RHEL9-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-RHEL8-STIG",
+      "full_name": "ansible-lockdown/Private-RHEL8-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-RHEL7-STIG",
+      "full_name": "ansible-lockdown/Private-RHEL7-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-UBUNTU20-STIG",
+      "full_name": "ansible-lockdown/Private-UBUNTU20-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "-Security_Guidelines-",
+      "full_name": "ansible-lockdown/-Security_Guidelines-",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "RHEL9-STIG",
+      "full_name": "ansible-lockdown/RHEL9-STIG",
+      "commits": 1,
+      "prs_merged": 3,
+      "issues_closed": 4,
+      "files_changed": 24
+    },
+    {
+      "name": "RHEL9-STIG-Audit",
+      "full_name": "ansible-lockdown/RHEL9-STIG-Audit",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-Windows-2022-STIG",
+      "full_name": "ansible-lockdown/Private-Windows-2022-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "ansible-terrapin-ssh",
+      "full_name": "ansible-lockdown/ansible-terrapin-ssh",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-RHEL8-CIS",
+      "full_name": "ansible-lockdown/Private-RHEL8-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-Windows-2019-STIG",
+      "full_name": "ansible-lockdown/Private-Windows-2019-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "DEBIAN11-CIS-Audit",
+      "full_name": "ansible-lockdown/DEBIAN11-CIS-Audit",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-Windows-10-CIS",
+      "full_name": "ansible-lockdown/Private-Windows-10-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-Windows-11-CIS",
+      "full_name": "ansible-lockdown/Private-Windows-11-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-AMAZON2-CIS",
+      "full_name": "ansible-lockdown/Private-AMAZON2-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-DEBIAN12-CIS",
+      "full_name": "ansible-lockdown/Private-DEBIAN12-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "DEBIAN12-CIS",
+      "full_name": "ansible-lockdown/DEBIAN12-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-RHEL7-CIS",
+      "full_name": "ansible-lockdown/Private-RHEL7-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "AL_playbook_checks",
+      "full_name": "ansible-lockdown/AL_playbook_checks",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-UBUNTU22-CIS",
+      "full_name": "ansible-lockdown/Private-UBUNTU22-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-WIN-PDC-CIS-GPO",
+      "full_name": "ansible-lockdown/Private-WIN-PDC-CIS-GPO",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "UBUNTU24-CIS",
+      "full_name": "ansible-lockdown/UBUNTU24-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-Kubernetes-CIS",
+      "full_name": "ansible-lockdown/Private-Kubernetes-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-Windows-2019-CIS",
+      "full_name": "ansible-lockdown/Private-Windows-2019-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "-Star_Tracking-",
+      "full_name": "ansible-lockdown/-Star_Tracking-",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-RHEL9-CIS",
+      "full_name": "ansible-lockdown/Private-RHEL9-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-Windows-2022-CIS",
+      "full_name": "ansible-lockdown/Private-Windows-2022-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "DEBIAN12-CIS-Audit",
+      "full_name": "ansible-lockdown/DEBIAN12-CIS-Audit",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-UBUNTU24-CIS",
+      "full_name": "ansible-lockdown/Private-UBUNTU24-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "UBUNTU24-CIS-Audit",
+      "full_name": "ansible-lockdown/UBUNTU24-CIS-Audit",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-Ubuntu22-STIG",
+      "full_name": "ansible-lockdown/Private-Ubuntu22-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "UBUNTU22-STIG-Audit",
+      "full_name": "ansible-lockdown/UBUNTU22-STIG-Audit",
+      "commits": 0,
+      "prs_merged": 1,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "RHEL10-CIS",
+      "full_name": "ansible-lockdown/RHEL10-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-SUSE15-CIS",
+      "full_name": "ansible-lockdown/Private-SUSE15-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "-Repo_Updater-",
+      "full_name": "ansible-lockdown/-Repo_Updater-",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-Windows-Test",
+      "full_name": "ansible-lockdown/Private-Windows-Test",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "test-audit",
+      "full_name": "ansible-lockdown/test-audit",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "test-public",
+      "full_name": "ansible-lockdown/test-public",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "UBUNTU22-STIG",
+      "full_name": "ansible-lockdown/UBUNTU22-STIG",
+      "commits": 3,
+      "prs_merged": 1,
+      "issues_closed": 0,
+      "files_changed": 113
+    },
+    {
+      "name": "Private-UBUNTU20-CIS",
+      "full_name": "ansible-lockdown/Private-UBUNTU20-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-Windows-11-STIG",
+      "full_name": "ansible-lockdown/Private-Windows-11-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-Windows-10-STIG",
+      "full_name": "ansible-lockdown/Private-Windows-10-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-Windows-2016-CIS",
+      "full_name": "ansible-lockdown/Private-Windows-2016-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "SUSE15-CIS-Audit",
+      "full_name": "ansible-lockdown/SUSE15-CIS-Audit",
+      "commits": 11,
+      "prs_merged": 2,
+      "issues_closed": 0,
+      "files_changed": 904
+    },
+    {
+      "name": "Windows-11-STIG",
+      "full_name": "ansible-lockdown/Windows-11-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-UBUNTU24-STIG",
+      "full_name": "ansible-lockdown/Private-UBUNTU24-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-RHEL10-CIS",
+      "full_name": "ansible-lockdown/Private-RHEL10-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "RHEL10-CIS-Audit",
+      "full_name": "ansible-lockdown/RHEL10-CIS-Audit",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "UBUNTU24-STIG-Audit",
+      "full_name": "ansible-lockdown/UBUNTU24-STIG-Audit",
+      "commits": 0,
+      "prs_merged": 1,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "SUSE15-CIS",
+      "full_name": "ansible-lockdown/SUSE15-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Windows-Test",
+      "full_name": "ansible-lockdown/Windows-Test",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-Windows-2025-CIS",
+      "full_name": "ansible-lockdown/Private-Windows-2025-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Windows-2025-CIS",
+      "full_name": "ansible-lockdown/Windows-2025-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "-Benchmark_Templates-",
+      "full_name": "ansible-lockdown/-Benchmark_Templates-",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "UBUNTU24-STIG",
+      "full_name": "ansible-lockdown/UBUNTU24-STIG",
+      "commits": 0,
+      "prs_merged": 1,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "ld-images",
+      "full_name": "ansible-lockdown/ld-images",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-Windows-2016-STIG",
+      "full_name": "ansible-lockdown/Private-Windows-2016-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-Debian13-CIS",
+      "full_name": "ansible-lockdown/Private-Debian13-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "DEBIAN13-CIS-AUDIT",
+      "full_name": "ansible-lockdown/DEBIAN13-CIS-AUDIT",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-AMAZON2023-STIG",
+      "full_name": "ansible-lockdown/Private-AMAZON2023-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "AMAZON2023-STIG-Audit",
+      "full_name": "ansible-lockdown/AMAZON2023-STIG-Audit",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "CIS_PDF_CONVERTER",
+      "full_name": "ansible-lockdown/CIS_PDF_CONVERTER",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-AMAZON2023-CIS",
+      "full_name": "ansible-lockdown/Private-AMAZON2023-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-QA-Test-Script",
+      "full_name": "ansible-lockdown/Private-QA-Test-Script",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-UBUNTU26-CIS",
+      "full_name": "ansible-lockdown/Private-UBUNTU26-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Audit-UBUNTU26-CIS",
+      "full_name": "ansible-lockdown/Audit-UBUNTU26-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "UBUNTU26-CIS",
+      "full_name": "ansible-lockdown/UBUNTU26-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "repo_updater",
+      "full_name": "ansible-lockdown/repo_updater",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "DEBIAN13-CIS",
+      "full_name": "ansible-lockdown/DEBIAN13-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "UBUNTU26-CIS-Audit",
+      "full_name": "ansible-lockdown/UBUNTU26-CIS-Audit",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-SUSE16-CIS",
+      "full_name": "ansible-lockdown/Private-SUSE16-CIS",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "SUSE16-CIS-Audit",
+      "full_name": "ansible-lockdown/SUSE16-CIS-Audit",
+      "commits": 1,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 346
+    },
+    {
+      "name": "SUSE16-CIS",
+      "full_name": "ansible-lockdown/SUSE16-CIS",
+      "commits": 1,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 8
+    },
+    {
+      "name": "AMAZON2023-STIG",
+      "full_name": "ansible-lockdown/AMAZON2023-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "Private-RHEL10-STIG",
+      "full_name": "ansible-lockdown/Private-RHEL10-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "RHEL10-STIG-Audit",
+      "full_name": "ansible-lockdown/RHEL10-STIG-Audit",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "RHEL10-STIG",
+      "full_name": "ansible-lockdown/RHEL10-STIG",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "AL-stig_parser",
+      "full_name": "ansible-lockdown/AL-stig_parser",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    },
+    {
+      "name": "AL-github-stats",
+      "full_name": "ansible-lockdown/AL-github-stats",
+      "commits": 0,
+      "prs_merged": 0,
+      "issues_closed": 0,
+      "files_changed": 0
+    }
+  ]
+}
