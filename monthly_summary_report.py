@@ -25,6 +25,7 @@ _MONTHS = [
 ]
 MONTH_ORDER = {name: i + 1 for i, name in enumerate(_MONTHS)}
 MONTH_ORDER.update({name[:3]: i + 1 for i, name in enumerate(_MONTHS)})
+MONTH_ORDER["sept"] = 9
 FILENAME_RE = re.compile(r"^([a-zA-Z]+)(\d{2})_stats\.json$", re.IGNORECASE)
 
 # ------------------------------------------------------------------ #
@@ -469,6 +470,7 @@ def main() -> None:
     for path in sorted(stats_dir.glob("*_stats.json")):
         parsed = _parse_month_file(path)
         if not parsed:
+            print(f"Skipping {path.name}: unrecognised month name in filename", file=sys.stderr)
             continue
         year, month_num, display = parsed
         with open(path) as f:
