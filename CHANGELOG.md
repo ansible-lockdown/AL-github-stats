@@ -10,7 +10,8 @@
   - Collapsible **New Repos** section per card, listing repos that did not appear in the previous month
   - Overall Totals card at the bottom, summing activity across all months with repo count taken from the latest month
   - Ansible Lockdown logo and favicon in the header
-  - Supports both full month names (`january`) and 3-letter abbreviations (`jan`) in filenames
+  - Supports full month names (`january`), 3-letter abbreviations (`jan`) and `sept` in filenames
+  - Prints a warning to stderr when a `*_stats.json` file is skipped because its month name is not recognised
 
 ### Changes to `github_monthly_org_stats.py`
 
